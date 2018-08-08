@@ -8,6 +8,7 @@ import java.util.Random;
 public class Playfield {
     private char[][] playfield;
     private Player[] players = new Player[3];
+    private Player computerPlayer;
     private Map<Integer, Character> symbols = null;
     private int remainingAvailableCells = 0;
     public static final char EMPTY_CHAR = ' ';
@@ -23,9 +24,10 @@ public class Playfield {
         this.playfield = new char[playfieldSize][playfieldSize];
         remainingAvailableCells = playfieldSize * playfieldSize;
         setupPlayfield();
+        computerPlayer = new Player(3, symbolComputer, "computer");
         players[0] = new Player(1, symbolPlayer1, "player 1");
         players[1] = new Player(2, symbolPlayer2, "player 2");
-        players[2] = new Player(3, symbolComputer, "computer");
+        players[2] = computerPlayer;
     }
 
     private void validateValues(int playfieldSize, char symbolPlayer1, char symbolPlayer2, char symbolComputer) {
@@ -80,22 +82,25 @@ public class Playfield {
         return EMPTY_CHAR;
     }
 
-    public void addMove(int playerIndex, int xAxis, int yAxis) {
-        char a = getSymbolByPlayerIndex(playerIndex);
-        --xAxis;
-        --yAxis;
+    public void addMove(int playerIndex, PlayfieldAxis playfieldAxis) {
+        char inputChar = getSymbolByPlayerIndex(playerIndex);
 
-        if (xAxis < 0 || yAxis < 0
-                || xAxis > playfield.length || yAxis > playfield.length
-                || playfield[xAxis][yAxis] != EMPTY_CHAR
+        if (playfieldAxis.getX() < 0 || playfieldAxis.getY() < 0
+                || playfieldAxis.getX() > playfield.length || playfieldAxis.getY() > playfield.length
+                || getChar(playfieldAxis) != EMPTY_CHAR
         ) {
             throw new IllegalArgumentException("Invalid position. Please choose another one.");
         }
 
-        remainingAvailableCells--;
+        --remainingAvailableCells;
 
-        playfield[xAxis][yAxis] = a;
+        setChar(playfieldAxis, inputChar);
     }
+
+    private void setChar(PlayfieldAxis playfieldAxis, char inputChar) {
+        playfield[playfieldAxis.getX()][playfieldAxis.getY()] = inputChar;
+    }
+
 
     public char[][] getPlayfield() {
         return playfield;
@@ -103,10 +108,6 @@ public class Playfield {
 
     public Player[] getPlayers() {
         return players;
-    }
-
-    public Map<Integer, Character> getSymbols() {
-        return symbols;
     }
 
     public boolean checkWin() {
@@ -167,23 +168,27 @@ public class Playfield {
         return isWin;
     }
 
-    public int[] addComputerMove() {
-        int[]axis = generateComputerMove();
-
-        while(playfield[axis[0]][axis[1]] != EMPTY_CHAR){
-            axis = generateComputerMove();
-        }
-
-        addMove(3, axis[0]+1, axis[1]+1);
-
-        return axis;
+    public char getChar(PlayfieldAxis playfieldAxis){
+        return playfield[playfieldAxis.getX()][playfieldAxis.getY()];
     }
 
-    public int[] generateComputerMove() {
+    public PlayfieldAxis addComputerMove() {
+        PlayfieldAxis playfieldAxis = generateComputerMove();
+
+        while(getChar(playfieldAxis) != EMPTY_CHAR){
+            playfieldAxis = generateComputerMove();
+        }
+
+        addMove(computerPlayer.getPlayerNumber(), playfieldAxis);
+
+        return playfieldAxis;
+    }
+
+    public PlayfieldAxis generateComputerMove() {
         int x = generateRandomNumber();
         int y = generateRandomNumber();
 
-       return new int[]{x,y};
+       return new PlayfieldAxis(x,y);
     }
 
     private int generateRandomNumber(){

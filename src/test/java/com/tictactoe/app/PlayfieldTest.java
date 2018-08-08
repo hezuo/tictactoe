@@ -55,25 +55,26 @@ public class PlayfieldTest {
     public void addMoveValid() {
         int playfieldSize = 10;
         Playfield playfield = createPlayfield(playfieldSize);
-        playfield.addMove(1, 1, 1);
-        playfield.addMove(2, 2, 1);
-        playfield.addMove(3, 3, 1);
+        playfield.addMove(1, new PlayfieldAxis(0,0));
+        playfield.addMove(2, new PlayfieldAxis(1,0));
+        playfield.addMove(3, new PlayfieldAxis(2,0));
 
         assertEquals(symbolPlayer1, playfield.getPlayfield()[0][0]);
         assertEquals(symbolPlayer2, playfield.getPlayfield()[1][0]);
         assertEquals(symbolComputer, playfield.getPlayfield()[2][0]);
 
-        playfield.addMove(1, 1, 2);
-        playfield.addMove(2, 2, 2);
-        playfield.addMove(3, 3, 2);
+        playfield.addMove(1, new PlayfieldAxis(0,1));
+        playfield.addMove(2, new PlayfieldAxis(1,1));
+        playfield.addMove(3, new PlayfieldAxis(2,1));
 
         assertEquals(symbolPlayer1, playfield.getPlayfield()[0][1]);
         assertEquals(symbolPlayer2, playfield.getPlayfield()[1][1]);
         assertEquals(symbolComputer, playfield.getPlayfield()[2][1]);
 
-        playfield.addMove(1, 1, 3);
-        playfield.addMove(2, 2, 3);
-        playfield.addMove(3, 3, 3);
+        playfield.addMove(1, new PlayfieldAxis(0,2));
+        playfield.addMove(2, new PlayfieldAxis(1,2));
+        playfield.addMove(3, new PlayfieldAxis(2,2));
+
 
         assertEquals(symbolPlayer1, playfield.getPlayfield()[0][2]);
         assertEquals(symbolPlayer2, playfield.getPlayfield()[1][2]);
@@ -84,34 +85,36 @@ public class PlayfieldTest {
     public void checkValidHorizontal() {
         int playfieldSize = 4;
         Playfield playfield = createPlayfield(playfieldSize);
-        playfield.addMove(1, 1, 4);
-        playfield.addMove(1, 2, 4);
-        playfield.addMove(1, 4, 4);
-        playfield.addMove(2, 3, 1);
-        playfield.addMove(3, 2, 2);
+        playfield.addMove(1, new PlayfieldAxis(0,3));
+        playfield.addMove(1, new PlayfieldAxis(1,3));
+        playfield.addMove(1, new PlayfieldAxis(3,3));
+        playfield.addMove(2, new PlayfieldAxis(2,0));
+        playfield.addMove(3, new PlayfieldAxis(1,1));
+
         assertFalse(playfield.checkWin());
 
-        playfield.addMove(1, 3, 4);
+        playfield.addMove(1, new PlayfieldAxis(2,3));
 
         assertTrue(playfield.checkWin());
 
     }
+
     @Test
     public void checkValidVertical() {
         int playfieldSize = 3;
         Playfield playfield = createPlayfield(playfieldSize);
-        playfield.addMove(1, 1, 1);
-        playfield.addMove(2, 2, 1);
-        playfield.addMove(3, 3, 1);
 
-        playfield.addMove(1, 1, 2);
+        playfield.addMove(1, new PlayfieldAxis(0,0));
+        playfield.addMove(2, new PlayfieldAxis(1,0));
+        playfield.addMove(3, new PlayfieldAxis(2,0));
 
-        playfield.addMove(2, 2, 2);
-        playfield.addMove(3, 3, 2);
+        playfield.addMove(1, new PlayfieldAxis(0,1));
+        playfield.addMove(2, new PlayfieldAxis(1,1));
+        playfield.addMove(3, new PlayfieldAxis(2,1));
 
         assertFalse(playfield.checkWin());
 
-        playfield.addMove(1, 1, 3);
+        playfield.addMove(1, new PlayfieldAxis(0,2));
 
         assertTrue(playfield.checkWin());
     }
@@ -120,19 +123,17 @@ public class PlayfieldTest {
     public void checkValid_ValidDiagonal() {
         int playfieldSize = 4;
         Playfield playfield = createPlayfield(playfieldSize);
-        playfield.addMove(1, 1, 1);
-        playfield.addMove(2, 2, 1);
-        playfield.addMove(3, 3, 1);
 
-        playfield.addMove(1, 2, 2);
-
-        playfield.addMove(2, 2, 3);
-        playfield.addMove(3, 3, 2);
-        playfield.addMove(1, 3, 3);
+        playfield.addMove(1, new PlayfieldAxis(0,0));
+        playfield.addMove(1, new PlayfieldAxis(1,1));
+        playfield.addMove(1, new PlayfieldAxis(2,2));
+        playfield.addMove(2, new PlayfieldAxis(1,0));
+        playfield.addMove(3, new PlayfieldAxis(2,1));
 
         assertFalse(playfield.checkWin());
 
-        playfield.addMove(1, 4, 4);
+        playfield.addMove(1, new PlayfieldAxis(3,3));
+
         assertTrue(playfield.checkWin());
     }
 
@@ -140,24 +141,26 @@ public class PlayfieldTest {
     public void checkValid_ValidDiagonalReverse() {
         int playfieldSize = 5;
         Playfield playfield = createPlayfield(playfieldSize);
-        playfield.addMove(1, 5, 1);
-        playfield.addMove(1, 4, 2);
-        playfield.addMove(1, 3, 3);
-        playfield.addMove(1, 2, 4);
 
-        playfield.addMove(2, 2, 1);
-        playfield.addMove(3, 3, 1);
+        playfield.addMove(1, new PlayfieldAxis(4,0));
+        playfield.addMove(1, new PlayfieldAxis(3,1));
+        playfield.addMove(1, new PlayfieldAxis(2,2));
+        playfield.addMove(1, new PlayfieldAxis(1,3));
 
-        playfield.addMove(1, 2, 2);
+        playfield.addMove(2, new PlayfieldAxis(1,0));
+        playfield.addMove(3, new PlayfieldAxis(2,0));
 
-        playfield.addMove(2, 2, 3);
-        playfield.addMove(3, 3, 2);
+
+        playfield.addMove(1, new PlayfieldAxis(1,1));
+
+        playfield.addMove(2, new PlayfieldAxis(1,2));
+        playfield.addMove(3, new PlayfieldAxis(2,1));
 
         assertFalse(playfield.checkWin());
 
-        playfield.addMove(1, 1, 5);
+        playfield.addMove(1, new PlayfieldAxis(0,4));
+        playfield.addMove(1, new PlayfieldAxis(3,3));
 
-        playfield.addMove(1, 4, 4);
         assertTrue(playfield.checkWin());
     }
 
@@ -167,28 +170,32 @@ public class PlayfieldTest {
         Playfield playfield = createPlayfield(playfieldSize);
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invalid position. Please choose another one.");
-        playfield.addMove(1, 0, 0);
+
+        playfield.addMove(1, new PlayfieldAxis(0,0));
+        playfield.addMove(1, new PlayfieldAxis(0,0));
+
     }
 
-    @Test
-    public void addMove_InvalidPositionTaken() {
-        int playfieldSize = 10;
-        Playfield playfield = createPlayfield(playfieldSize);
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Invalid position. Please choose another one.");
+     @Test
+     public void addMove_InvalidPositionTaken() {
+         int playfieldSize = 10;
+         Playfield playfield = createPlayfield(playfieldSize);
+         thrown.expect(IllegalArgumentException.class);
+         thrown.expectMessage("Invalid position. Please choose another one.");
 
-        playfield.addMove(1, 1, 1);
-        playfield.addMove(1, 1, 1);
-    }
+         playfield.addMove(1, new PlayfieldAxis(0,0));
+         playfield.addMove(2, new PlayfieldAxis(0,0));
+     }
 
-    @Test
-    public void addMove_InvalidPositionMax() {
-        int playfieldSize = 4;
-        Playfield playfield = createPlayfield(playfieldSize);
-        thrown.expect(IllegalArgumentException.class);
-        playfield.addMove(1, 6, 5);
-    }
+     @Test
+     public void addMove_InvalidPositionMax() {
+         int playfieldSize = 4;
+         Playfield playfield = createPlayfield(playfieldSize);
+         thrown.expect(IllegalArgumentException.class);
 
+         playfield.addMove(1, new PlayfieldAxis(6,7));
+
+     }
 
     private Playfield createPlayfield(int playfieldSize){
         return  new Playfield(playfieldSize,
@@ -212,7 +219,8 @@ public class PlayfieldTest {
     public void generateComputerMove() {
         int playfieldSize = 4;
         Playfield playfield = createPlayfield(playfieldSize);
-        int[] axis = playfield.generateComputerMove();
-        assertEquals(2, axis.length);
+        PlayfieldAxis axis = playfield.generateComputerMove();
+        assertNotNull(axis.getX());
+        assertNotNull(axis.getY());
     }
 }
